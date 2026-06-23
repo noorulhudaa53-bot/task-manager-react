@@ -1,8 +1,11 @@
+import { useState } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Card from './components/Card';
 import Button from './components/Button';
 import Layout from './components/Layout';
+import ProfileForm from './components/ProfileForm';
+import ThemeToggle from './components/ThemeToggle';
 
 const projects = [
   { id: 1, title: 'E-Commerce App', description: 'MERN stack online store' },
@@ -14,9 +17,22 @@ const projects = [
 ];
 
 function App() {
+   const [isDark, setIsDark] = useState(false);
+
   return (
-    <>
+    <div style={{
+      background: isDark ? '#111827' : '#ffffff',
+      color: isDark ? '#f9fafb' : '#111827',
+      minHeight: '100vh',
+      transition: 'all 0.3s'
+    }}>
+      
       <Header title="Portfolio" subtitle="MERN + AI Developer" />
+
+      <div style={{ textAlign: 'right', padding: '10px 20px' }}>
+        <ThemeToggle isDark={isDark} setIsDark={setIsDark} />
+      </div>
+      
       <Layout>
         <h2 style={{ fontSize: '20px', fontWeight: 'bold', margin: '16px 0' }}>
           My Projects
@@ -35,9 +51,15 @@ function App() {
           <Button label="Contact" variant="secondary" />
           <Button label="Delete" variant="danger" />
         </div>
+
+        <h2 style={{ fontSize: '20px', fontWeight: 'bold', margin: '32px 0 16px' }}>
+          Profile Form
+        </h2>
+        <ProfileForm />
+
       </Layout>
       <Footer text="© 2026 — Built with React + Vite" />
-    </>
+    </div>
   );
 }
 
