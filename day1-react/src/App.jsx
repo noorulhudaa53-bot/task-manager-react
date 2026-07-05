@@ -8,6 +8,7 @@ import ProfileForm from './components/ProfileForm';
 import ThemeToggle from './components/ThemeToggle';
 import PostsList from './components/PostsList';
 import ErrorBoundary from './components/ErrorBoundary';
+import ComponentDemo from './components/ComponentDemo';
 
 const projects = [
   { id: 1, title: 'E-Commerce App', description: 'MERN stack online store' },
@@ -62,6 +63,9 @@ function App() {
         <ErrorBoundary>
           <PostsList />
         </ErrorBoundary>
+
+        <ComponentDemo />
+        
       </Layout>
       <Footer text="© 2026 — Built with React + Vite" />
     </div>
