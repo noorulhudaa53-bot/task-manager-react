@@ -1,73 +1,47 @@
-import { useState } from 'react';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Card from './components/Card';
-import Button from './components/Button';
-import Layout from './components/Layout';
-import ProfileForm from './components/ProfileForm';
-import ThemeToggle from './components/ThemeToggle';
-import PostsList from './components/PostsList';
-import ErrorBoundary from './components/ErrorBoundary';
-import ComponentDemo from './components/ComponentDemo';
+import { lazy, Suspense } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import ProtectedRoute from './components/ProtectedRoute';
+import Home from './pages/Home';
+import Profile from './pages/Profile';
+import Settings from './pages/Settings';
+import Login from './pages/Login';
+import NotFound from './pages/NotFound';
+import OldWork from './pages/OldWork';
 
-const projects = [
-  { id: 1, title: 'E-Commerce App', description: 'MERN stack online store' },
-  { id: 2, title: 'AI Chatbot', description: 'LangChain powered assistant' },
-  { id: 3, title: 'SaaS Dashboard', description: 'Stripe billing + analytics' },
-  { id: 4, title: 'Lead Generation Automation',description: 'Automatically collect and organize business leads' },
-  { id: 5, title: 'AI Study Assistant', description: 'Helps students summarize notes and generate quizzes' },
-  { id: 6, title: 'Freelance Client CRM', description: 'Manage clients, projects, invoices and payments' },
-];
+const Dashboard = lazy(() => import('./pages/Dashboard'));
 
 function App() {
-   const [isDark, setIsDark] = useState(false);
-
   return (
-    <div style={{
-      background: isDark ? '#111827' : '#ffffff',
-      color: isDark ? '#f9fafb' : '#111827',
-      minHeight: '100vh',
-      transition: 'all 0.3s'
-    }}>
-      
-      <Header title="Portfolio" subtitle="MERN + AI Developer" />
+    <div style={{ minHeight: '100vh' }}>
+      <Navbar />
 
-      <div style={{ textAlign: 'right', padding: '10px 20px' }}>
-        <ThemeToggle isDark={isDark} setIsDark={setIsDark} />
-      </div>
-      
-      <Layout>
-        <h2 style={{ fontSize: '20px', fontWeight: 'bold', margin: '16px 0' }}>
-          My Projects
-        </h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
-          {projects.map((project) => (
-            <Card
-              key={project.id}
-              title={project.title}
-              description={project.description}
-            />
-          ))}
+      <Suspense fallback={
+        <div style={{ textAlign: 'center', padding: '40px' }}>
+          <p>Loading...</p>
         </div>
-        <div style={{ marginTop: '24px' }}>
-          <Button label="View All" variant="primary" onClick={() => alert('Coming soon!')} />
-          <Button label="Contact" variant="secondary" />
-          <Button label="Delete" variant="danger" />
-        </div>
+      }>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/oldwork" element={<OldWork />} />
 
-        <h2 style={{ fontSize: '20px', fontWeight: 'bold', margin: '32px 0 16px' }}>
-          Profile Form
-        </h2>
-        <ProfileForm />
+          {/* Protected Route */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
 
-        <ErrorBoundary>
-          <PostsList />
-        </ErrorBoundary>
-
-        <ComponentDemo />
-        
-      </Layout>
-      <Footer text="© 2026 — Built with React + Vite" />
+          {/* 404 Page */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
     </div>
   );
 }
