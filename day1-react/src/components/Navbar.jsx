@@ -1,11 +1,14 @@
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const isLoggedIn = localStorage.getItem('isLoggedIn');
+  const { user, logout } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
 
   const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
+    logout();
     navigate('/login');
   };
 
@@ -20,9 +23,21 @@ const Navbar = () => {
         <Link to="/profile" style={{ color: 'white', textDecoration: 'none', fontSize: '14px' }}>Profile</Link>
         <Link to="/settings" style={{ color: 'white', textDecoration: 'none', fontSize: '14px' }}>Settings</Link>
         <Link to="/oldwork" style={{ color: 'white', textDecoration: 'none', fontSize: '14px' }}>Previous Work</Link>
+        <Link to="/cart" style={{ color: 'white', textDecoration: 'none', fontSize: '14px' }}>Cart</Link>
 
-        {isLoggedIn ? (
+        {/* Theme Toggle */}
+        <button
+          onClick={toggleTheme}
+          style={{ padding: '6px 12px', background: isDark ? '#f9fafb' : '#1f2937', color: isDark ? '#1f2937' : '#f9fafb', border: 'none', borderRadius: '20px', cursor: 'pointer', fontSize: '12px' }}
+        >
+          {isDark ? 'Light' : 'Dark'}
+        </button>
+
+        {user ? (
           <>
+            <span style={{ color: '#93c5fd', fontSize: '14px' }}>
+              Hi, {user.name}!
+            </span>
             <Link to="/dashboard" style={{ color: 'white', textDecoration: 'none', fontSize: '14px' }}>Dashboard</Link>
             <button
               onClick={handleLogout}

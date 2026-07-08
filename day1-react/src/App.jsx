@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { useTheme } from './contexts/ThemeContext';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
@@ -8,12 +9,15 @@ import Settings from './pages/Settings';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
 import OldWork from './pages/OldWork';
+import CartDemo from './pages/CartDemo';
 
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 
 function App() {
+  const { colors } = useTheme();
+
   return (
-    <div style={{ minHeight: '100vh' }}>
+    <div style={{ minHeight: '100vh' , background: colors.background, color: colors.text, transition: 'all 0.3s'}}>
       <Navbar />
 
       <Suspense fallback={
@@ -27,6 +31,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/oldwork" element={<OldWork />} />
+          <Route path="/cart" element={<CartDemo />} />
 
           {/* Protected Route */}
           <Route

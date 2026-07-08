@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = () => {
     if (email === 'admin@test.com' && password === '123456') {
-      localStorage.setItem('isLoggedIn', 'true');
+      login(email);
       navigate('/dashboard');
     } else {
       setError('Wrong email or password! Use admin@test.com / 123456');
